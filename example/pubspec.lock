@@ -169,7 +169,7 @@ packages:
       name: google_api_headers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.1+2"
+    version: "0.2.0-nullsafety.1"
   google_maps_flutter:
     dependency: transitive
     description:
@@ -183,14 +183,14 @@ packages:
       name: google_maps_flutter_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   google_maps_place_picker:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "1.0.1"
+    version: "2.0.0-nullsafety"
   google_maps_webservice:
     dependency: transitive
     description:
@@ -295,7 +295,7 @@ packages:
       name: package_info
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.3+4"
+    version: "0.5.0-nullsafety"
   path:
     dependency: transitive
     description:
