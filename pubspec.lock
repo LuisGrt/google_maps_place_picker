@@ -149,27 +149,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  geolocator:
-    dependency: "direct main"
-    description:
-      name: geolocator
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.2.1"
-  geolocator_platform_interface:
-    dependency: transitive
-    description:
-      name: geolocator_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.9"
-  geolocator_web:
-    dependency: transitive
-    description:
-      name: geolocator_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   glob:
     dependency: transitive
     description:
@@ -240,6 +219,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.2"
+  location:
+    dependency: "direct main"
+    description:
+      name: location
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.2"
+  location_platform_interface:
+    dependency: transitive
+    description:
+      name: location_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
+  location_web:
+    dependency: transitive
+    description:
+      name: location_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.2"
   logging:
     dependency: transitive
     description:
@@ -296,27 +296,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.11.0"
-  permission_handler:
-    dependency: "direct main"
-    description:
-      name: permission_handler
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.1.0+2"
-  permission_handler_platform_interface:
-    dependency: transitive
-    description:
-      name: permission_handler_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.2"
   plugin_platform_interface:
     dependency: transitive
     description:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.3"
+    version: "2.0.0"
   provider:
     dependency: "direct main"
     description:
@@ -442,5 +428,5 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.12.0-259.9.beta <3.0.0"
+  dart: ">=2.12.0 <3.0.0"
   flutter: ">=1.22.0"

@@ -33,6 +33,7 @@ class GoogleMapPlacePicker extends StatelessWidget {
     Key? key,
     required this.initialTarget,
     required this.appBarKey,
+    required this.zoomControlsEnabled,
     this.selectedPlaceWidgetBuilder,
     this.pinBuilder,
     this.onSearchFailed,
@@ -78,6 +79,7 @@ class GoogleMapPlacePicker extends StatelessWidget {
 
   final bool? forceSearchOnZoomChanged;
   final bool? hidePlaceDetailsWhenDraggingPin;
+  final bool zoomControlsEnabled;
 
   _searchByCameraLocation(PlaceProvider provider) async {
     // We don't want to search location again if camera location is changed by zooming in/out.
@@ -141,8 +143,8 @@ class GoogleMapPlacePicker extends StatelessWidget {
 
   Widget _buildGoogleMap(BuildContext context) {
     return Selector<PlaceProvider, MapType>(
-        selector: (_, provider) => provider.mapType,
-        builder: (_, data, __) {
+        selector: (context, provider) => provider.mapType,
+        builder: (context, data, __) {
           PlaceProvider provider = PlaceProvider.of(context, listen: false);
           CameraPosition initialCameraPosition = CameraPosition(target: initialTarget, zoom: 15);
 
@@ -153,6 +155,7 @@ class GoogleMapPlacePicker extends StatelessWidget {
             initialCameraPosition: initialCameraPosition,
             mapType: data,
             myLocationEnabled: true,
+            zoomControlsEnabled: zoomControlsEnabled,
             onMapCreated: (GoogleMapController controller) {
               provider.mapController = controller;
               provider.setCameraPosition(null);
@@ -336,14 +339,16 @@ class GoogleMapPlacePicker extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 10),
-          RaisedButton(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Text(
-              "Select here",
-              style: TextStyle(fontSize: 16),
+          ElevatedButton(
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.symmetric(horizontal: 15, vertical: 10),),
+              shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4.0),
+              )),
             ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4.0),
+            child: const Text(
+              "Select here",
+              style: const TextStyle(fontSize: 16),
             ),
             onPressed: () {
               onPlacePicked!(result);

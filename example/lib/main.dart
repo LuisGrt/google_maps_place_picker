@@ -60,14 +60,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Google Map Place Picer Demo"),
+          title: Text("Google Map Place Picker Demo"),
         ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              RaisedButton(
+              ElevatedButton(
                 child: Text("Load Google Map"),
                 onPressed: () {
                   Navigator.push(
@@ -78,6 +78,7 @@ class _HomePageState extends State<HomePage> {
                           apiKey: APIKeys.apiKey,
                           initialPosition: HomePage.kInitialPosition,
                           useCurrentLocation: true,
+                          zoomControlsEnabled: false,
                           selectInitialPosition: true,
 
                           //usePlaceDetailSearch: true,
@@ -103,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                                     borderRadius: BorderRadius.circular(12.0),
                                     child: state == SearchingState.Searching
                                         ? Center(child: CircularProgressIndicator())
-                                        : RaisedButton(
+                                        : ElevatedButton(
                                             child: Text("Pick Here"),
                                             onPressed: () {
                                               // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
