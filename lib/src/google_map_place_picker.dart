@@ -34,23 +34,23 @@ class GoogleMapPlacePicker extends StatelessWidget {
     required this.initialTarget,
     required this.appBarKey,
     required this.zoomControlsEnabled,
+    required this.enableMapTypeButton,
+    required this.enableMyLocationButton,
+    required this.selectInitialPosition,
+    required this.forceSearchOnZoomChanged,
+    required this.hidePlaceDetailsWhenDraggingPin,
     this.selectedPlaceWidgetBuilder,
     this.pinBuilder,
     this.onSearchFailed,
     this.onMoveStart,
     this.onMapCreated,
     this.debounceMilliseconds,
-    this.enableMapTypeButton,
-    this.enableMyLocationButton,
     this.onToggleMapType,
     this.onMyLocation,
     this.onPlacePicked,
     this.usePinPointingSearch,
     this.usePlaceDetailSearch,
-    this.selectInitialPosition,
     this.language,
-    this.forceSearchOnZoomChanged,
-    this.hidePlaceDetailsWhenDraggingPin,
   }) : super(key: key);
 
   final LatLng initialTarget;
@@ -67,8 +67,8 @@ class GoogleMapPlacePicker extends StatelessWidget {
   final ValueChanged<PickResult>? onPlacePicked;
 
   final int? debounceMilliseconds;
-  final bool? enableMapTypeButton;
-  final bool? enableMyLocationButton;
+  final bool enableMapTypeButton;
+  final bool enableMyLocationButton;
 
   final bool? usePinPointingSearch;
   final bool? usePlaceDetailSearch;
@@ -83,7 +83,9 @@ class GoogleMapPlacePicker extends StatelessWidget {
 
   _searchByCameraLocation(PlaceProvider provider) async {
     // We don't want to search location again if camera location is changed by zooming in/out.
-    bool hasZoomChanged = provider.cameraPosition != null && provider.prevCameraPosition != null && provider.cameraPosition!.zoom != provider.prevCameraPosition!.zoom;
+    bool hasZoomChanged = provider.cameraPosition != null &&
+        provider.prevCameraPosition != null &&
+        provider.cameraPosition!.zoom != provider.prevCameraPosition!.zoom;
 
     if (forceSearchOnZoomChanged == false && hasZoomChanged) {
       provider.placeSearchingState = SearchingState.Idle;
@@ -92,12 +94,16 @@ class GoogleMapPlacePicker extends StatelessWidget {
 
     provider.placeSearchingState = SearchingState.Searching;
 
-    final GeocodingResponse response = await provider.geocoding.searchByLocation(
-      Location(lat: provider.cameraPosition!.target.latitude, lng: provider.cameraPosition!.target.longitude),
+    final GeocodingResponse response =
+        await provider.geocoding.searchByLocation(
+      Location(
+          lat: provider.cameraPosition!.target.latitude,
+          lng: provider.cameraPosition!.target.longitude),
       language: language,
     );
 
-    if (response.errorMessage?.isNotEmpty == true || response.status == "REQUEST_DENIED") {
+    if (response.errorMessage?.isNotEmpty == true ||
+        response.status == "REQUEST_DENIED") {
       print("Camera Location Search Error: " + response.errorMessage!);
       if (onSearchFailed != null) {
         onSearchFailed!(response.status);
@@ -107,13 +113,16 @@ class GoogleMapPlacePicker extends StatelessWidget {
     }
 
     if (usePlaceDetailSearch!) {
-      final PlacesDetailsResponse detailResponse = await provider.places.getDetailsByPlaceId(
+      final PlacesDetailsResponse detailResponse =
+          await provider.places.getDetailsByPlaceId(
         response.results[0].placeId,
         language: language,
       );
 
-      if (detailResponse.errorMessage?.isNotEmpty == true || detailResponse.status == "REQUEST_DENIED") {
-        print("Fetching details by placeId Error: " + detailResponse.errorMessage!);
+      if (detailResponse.errorMessage?.isNotEmpty == true ||
+          detailResponse.status == "REQUEST_DENIED") {
+        print("Fetching details by placeId Error: " +
+            detailResponse.errorMessage!);
         if (onSearchFailed != null) {
           onSearchFailed!(detailResponse.status);
         }
@@ -121,9 +130,11 @@ class GoogleMapPlacePicker extends StatelessWidget {
         return;
       }
 
-      provider.selectedPlace = PickResult.fromPlaceDetailResult(detailResponse.result);
+      provider.selectedPlace =
+          PickResult.fromPlaceDetailResult(detailResponse.result);
     } else {
-      provider.selectedPlace = PickResult.fromGeocodingResult(response.results[0]);
+      provider.selectedPlace =
+          PickResult.fromGeocodingResult(response.results[0]);
     }
 
     provider.placeSearchingState = SearchingState.Idle;
@@ -146,7 +157,8 @@ class GoogleMapPlacePicker extends StatelessWidget {
         selector: (context, provider) => provider.mapType,
         builder: (context, data, __) {
           PlaceProvider provider = PlaceProvider.of(context, listen: false);
-          CameraPosition initialCameraPosition = CameraPosition(target: initialTarget, zoom: 15);
+          CameraPosition initialCameraPosition =
+              CameraPosition(target: initialTarget, zoom: 15);
 
           return GoogleMap(
             myLocationButtonEnabled: false,
@@ -182,7 +194,8 @@ class GoogleMapPlacePicker extends StatelessWidget {
                   if (provider.debounceTimer?.isActive ?? false) {
                     provider.debounceTimer!.cancel();
                   }
-                  provider.debounceTimer = Timer(Duration(milliseconds: debounceMilliseconds!), () {
+                  provider.debounceTimer =
+                      Timer(Duration(milliseconds: debounceMilliseconds!), () {
                     _searchByCameraLocation(provider);
                   });
                 }
@@ -211,7 +224,9 @@ class GoogleMapPlacePicker extends StatelessWidget {
             },
             // gestureRecognizers make it possible to navigate the map when it's a
             // child in a scroll view e.g ListView, SingleChildScrollView...
-            gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
+            gestureRecognizers: Set()
+              ..add(Factory<EagerGestureRecognizer>(
+                  () => EagerGestureRecognizer())),
           );
         });
   }
@@ -224,7 +239,9 @@ class GoogleMapPlacePicker extends StatelessWidget {
           if (pinBuilder == null) {
             return _defaultPinBuilder(context, state);
           } else {
-            return Builder(builder: (builderContext) => pinBuilder!(builderContext, state));
+            return Builder(
+                builder: (builderContext) =>
+                    pinBuilder!(builderContext, state));
           }
         },
       ),
@@ -265,7 +282,8 @@ class GoogleMapPlacePicker extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                AnimatedPin(child: Icon(Icons.place, size: 36, color: Colors.red)),
+                AnimatedPin(
+                    child: Icon(Icons.place, size: 36, color: Colors.red)),
                 SizedBox(height: 42),
               ],
             ),
@@ -286,32 +304,47 @@ class GoogleMapPlacePicker extends StatelessWidget {
   }
 
   Widget _buildFloatingCard() {
-    return Selector<PlaceProvider, Tuple4<PickResult?, SearchingState, bool, PinState>>(
-      selector: (_, provider) => Tuple4(provider.selectedPlace, provider.placeSearchingState, provider.isSearchBarFocused, provider.pinState),
+    return Selector<PlaceProvider,
+        Tuple4<PickResult?, SearchingState, bool, PinState>>(
+      selector: (_, provider) => Tuple4(
+          provider.selectedPlace,
+          provider.placeSearchingState,
+          provider.isSearchBarFocused,
+          provider.pinState),
       builder: (context, data, __) {
-        if ((data.item1 == null && data.item2 == SearchingState.Idle) || data.item3 == true || data.item4 == PinState.Dragging && this.hidePlaceDetailsWhenDraggingPin!) {
+        if ((data.item1 == null && data.item2 == SearchingState.Idle) ||
+            data.item3 == true ||
+            data.item4 == PinState.Dragging &&
+                this.hidePlaceDetailsWhenDraggingPin!) {
           return Container();
         } else {
           if (selectedPlaceWidgetBuilder == null) {
             return _defaultPlaceWidgetBuilder(context, data.item1, data.item2);
           } else {
-            return Builder(builder: (builderContext) => selectedPlaceWidgetBuilder!(builderContext, data.item1, data.item2, data.item3));
+            return Builder(
+                builder: (builderContext) => selectedPlaceWidgetBuilder!(
+                    builderContext, data.item1, data.item2, data.item3));
           }
         }
       },
     );
   }
 
-  Widget _defaultPlaceWidgetBuilder(BuildContext context, PickResult? data, SearchingState state) {
+  Widget _defaultPlaceWidgetBuilder(
+      BuildContext context, PickResult? data, SearchingState state) {
+    final size = MediaQuery.of(context).size;
+
     return FloatingCard(
-      bottomPosition: MediaQuery.of(context).size.height * 0.05,
-      leftPosition: MediaQuery.of(context).size.width * 0.025,
-      rightPosition: MediaQuery.of(context).size.width * 0.025,
-      width: MediaQuery.of(context).size.width * 0.9,
+      bottomPosition: size.height * 0.05,
+      leftPosition: size.width * 0.025,
+      rightPosition: size.width * 0.025,
+      width: size.width * 0.9,
       borderRadius: BorderRadius.circular(12.0),
       elevation: 4.0,
       color: Theme.of(context).cardColor,
-      child: state == SearchingState.Searching ? _buildLoadingIndicator() : _buildSelectionDetails(context, data!),
+      child: state == SearchingState.Searching
+          ? _buildLoadingIndicator()
+          : _buildSelectionDetails(context, data!),
     );
   }
 
@@ -319,7 +352,7 @@ class GoogleMapPlacePicker extends StatelessWidget {
     return Container(
       height: 48,
       child: const Center(
-        child: SizedBox(
+        child: const SizedBox(
           width: 24,
           height: 24,
           child: CircularProgressIndicator(),
@@ -341,8 +374,11 @@ class GoogleMapPlacePicker extends StatelessWidget {
           SizedBox(height: 10),
           ElevatedButton(
             style: ButtonStyle(
-              padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.symmetric(horizontal: 15, vertical: 10),),
-              shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
+              padding: MaterialStateProperty.all<EdgeInsets>(
+                const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              ),
+              shape: MaterialStateProperty.all<OutlinedBorder>(
+                  RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4.0),
               )),
             ),
@@ -360,40 +396,43 @@ class GoogleMapPlacePicker extends StatelessWidget {
   }
 
   Widget _buildMapIcons(BuildContext context) {
-    final RenderBox appBarRenderBox = appBarKey.currentContext!.findRenderObject() as RenderBox;
+    final RenderBox appBarRenderBox =
+        appBarKey.currentContext!.findRenderObject() as RenderBox;
 
     return Positioned(
       top: appBarRenderBox.size.height,
       right: 15,
       child: Column(
-        children: <Widget>[
-          enableMapTypeButton!
-              ? Container(
-                  width: 35,
-                  height: 35,
-                  child: RawMaterialButton(
-                    shape: CircleBorder(),
-                    fillColor: Theme.of(context).brightness == Brightness.dark ? Colors.black54 : Colors.white,
-                    elevation: 8.0,
-                    onPressed: onToggleMapType,
-                    child: Icon(Icons.layers),
-                  ),
-                )
-              : Container(),
+        children: [
+          if (enableMapTypeButton)
+            Container(
+              width: 35,
+              height: 35,
+              child: RawMaterialButton(
+                shape: CircleBorder(),
+                fillColor: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.black54
+                    : Colors.white,
+                elevation: 8.0,
+                onPressed: onToggleMapType,
+                child: const Icon(Icons.layers),
+              ),
+            ),
           SizedBox(height: 10),
-          enableMyLocationButton!
-              ? Container(
-                  width: 35,
-                  height: 35,
-                  child: RawMaterialButton(
-                    shape: CircleBorder(),
-                    fillColor: Theme.of(context).brightness == Brightness.dark ? Colors.black54 : Colors.white,
-                    elevation: 8.0,
-                    onPressed: onMyLocation,
-                    child: Icon(Icons.my_location),
-                  ),
-                )
-              : Container(),
+          if (enableMyLocationButton)
+            Container(
+              width: 35,
+              height: 35,
+              child: RawMaterialButton(
+                shape: CircleBorder(),
+                fillColor: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.black54
+                    : Colors.white,
+                elevation: 8.0,
+                onPressed: onMyLocation,
+                child: const Icon(Icons.my_location),
+              ),
+            )
         ],
       ),
     );

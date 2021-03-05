@@ -122,7 +122,7 @@ class PlacePicker extends StatefulWidget {
   /// optional - builds selected place's UI
   ///
   /// It is provided by default if you leave it as a null.
-  /// INPORTANT: If this is non-null, [onPlacePicked] will not be invoked, as there will be no default 'Select here' button.
+  /// IMPORTANT: If this is non-null, [onPlacePicked] will not be invoked, as there will be no default 'Select here' button.
   final SelectedPlaceWidgetBuilder? selectedPlaceWidgetBuilder;
 
   /// optional - builds customized pin widget which indicates current pointing position.
@@ -157,7 +157,7 @@ class PlacePicker extends StatefulWidget {
   /// Allow searching place when zoom has changed. By default searching is disabled when zoom has changed in order to prevent unwilling API usage.
   final bool forceSearchOnZoomChanged;
 
-  /// Whether to display appbar backbutton. Defaults to true.
+  /// Whether to display appbar back button. Defaults to true.
   final bool automaticallyImplyAppBarLeading;
 
   /// Will perform an autocomplete search, if set to true. Note that setting
