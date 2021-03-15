@@ -323,7 +323,7 @@ class _PlacePickerState extends State<PlacePicker> {
 
     final PlacesDetailsResponse response =
         await context.read<PlaceProvider>().places.getDetailsByPlaceId(
-              prediction.placeId,
+              prediction.placeId!,
               sessionToken: context.read<PlaceProvider>().sessionToken,
               language: widget.autocompleteLanguage,
             );
